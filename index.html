@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HRS Simulator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <style>
+      .glow {
+        position: absolute;
+        top: 10px;
+        left: 45%;
+        color: #fff;
+        text-align: center;
+        -webkit-animation: glow 1s ease-in-out infinite alternate;
+        -moz-animation: glow 1s ease-in-out infinite alternate;
+        animation: glow 1s ease-in-out infinite alternate;
+      }
+
+      .side-menu {
+        position: absolute;
+        top: 100px;
+        background-color: aliceblue;
+        padding: 10px;
+        border-radius: 0px 10px 10px 0px;
+        width: 200px;
+        opacity: 0.9;
+      }
+
+      @-webkit-keyframes glow {
+        from {
+          text-shadow: 0 0 10px #0ce6ff, 0 0 20px #0ce6ff, 0 0 30px #0ce6ff;
+        }
+        to {
+          text-shadow: 0 0 20px #0ce6ff, 0 0 30px #0ce6ff;
+        }
+      }
+
+      /* Hide side-menu animation */
+      .side-menu.hidden {
+        width: 0px;
+      }
+      .side-menu.visible {
+        width: 200px;
+      }
+
+      .card {
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out;
+      }
+
+      .card.visible {
+        opacity: 0.9;
+        transition: opacity 1.5s ease-in-out;
+      }
+
+      .btn-fs {
+        left: 0px;
+      }
+      .btn-cfs {
+        left: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="glow mx-auto">
+      <div class="row">
+        <div class="col">HRS Simulator</div>
+      </div>
+    </h1>
+    <div id="side-menu" class="side-menu visible">
+      <div class="d-flex">
+        <h3>Menu</h3>
+        <button
+          class="btn btn-sm btn-primary"
+          style="position: absolute; top: -5px; right: -5px"
+          onclick="toggleSideMenu()"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+      </div>
+      <div class="row my-2">
+        <div class="col">
+          <button id="btn-home" class="btn btn-sm btn-outline-success w-100">
+            <i class="fa-solid fa-home"></i>
+          </button>
+        </div>
+      </div>
+      <div class="row my-2">
+        <div class="col">
+          <button id="btn-details" class="btn btn-sm btn-outline-primary w-100">
+            Hide Barier
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Cradle -->
+    <div
+      id="cardCradle"
+      class="card"
+      style="position: absolute; top: 50%; left: 50%; right: 5px"
+    >
+      <button
+        id="btn-close"
+        class="btn btn-sm btn-danger"
+        style="position: absolute; top: -5px; right: -5px"
+      >
+        X
+      </button>
+      <div class="card-body">
+        <h1>H2 Cradle</h1>
+        <p>
+          Function : supply Hydrogen to Hydrogen Storage. Pressure H2 supply is
+          120 Bar​
+        </p>
+      </div>
+    </div>
+    <!-- Storage -->
+    <div
+      id="cardStorage"
+      class="card"
+      style="position: absolute; top: 50%; left: 50%; right: 5px"
+    >
+      <button
+        id="btn-close-storage"
+        class="btn btn-sm btn-danger"
+        style="position: absolute; top: -5px; right: -5px"
+      >
+        X
+      </button>
+      <div class="card-body">
+        <h1>H2 Storage</h1>
+        <p>
+          Function : To store Compressed Hydrogen. Medium Pressure Storage (450
+          Bar) and High Pressure Storage (850 Bar)
+        </p>
+      </div>
+    </div>
+    <!-- dispencer -->
+    <div
+      id="cardDispenser"
+      class="card"
+      style="position: absolute; top: 50%; left: 50%; right: 5px"
+    >
+      <button
+        id="btn-close-dispenser"
+        class="btn btn-sm btn-danger"
+        style="position: absolute; top: -5px; right: -5px"
+      >
+        X
+      </button>
+      <div class="card-body">
+        <h1>H2 Dispenser​</h1>
+        <p>
+          Function : Refueling Hydrogen Facility to FCFL/Mirai. ​ H2 Dispenser
+          have 2 type Nozzle, 350 Bar & 700 Bar.
+        </p>
+      </div>
+    </div>
+    <!-- compressor -->
+    <div
+      id="cardCompressor"
+      class="card"
+      style="position: absolute; top: 50%; left: 50%; right: 5px"
+    >
+      <button
+        id="btn-close-compressor"
+        class="btn btn-sm btn-danger"
+        style="position: absolute; top: -5px; right: -5px"
+      >
+        X
+      </button>
+      <div class="card-body">
+        <h1>Compressor</h1>
+        <p>
+          Function : Compress Hydrogen from Craddle to H2 Storage. Have 3-stage
+          Operation​
+        </p>
+        <img src="./assets/compressor.png" alt="compressor" />
+      </div>
+    </div>
+    <!-- chiller -->
+    <div
+      id="cardChiller"
+      class="card"
+      style="position: absolute; top: 50%; left: 50%; right: 5px"
+    >
+      <button
+        id="btn-close-chiller"
+        class="btn btn-sm btn-danger"
+        style="position: absolute; top: -5px; right: -5px"
+      >
+        X
+      </button>
+      <div class="card-body">
+        <h1>Chiller</h1>
+        <p>
+          Function : Cooling HRS System during Refueling & Compressed.
+          Temperature During refueling : - 32 up to -40 °C
+        </p>
+      </div>
+    </div>
+    <!-- panel -->
+    <div
+      id="cardPanel"
+      class="card"
+      style="position: absolute; top: 50%; left: 50%; right: 5px"
+    >
+      <button
+        id="btn-close-panel"
+        class="btn btn-sm btn-danger"
+        style="position: absolute; top: -5px; right: -5px"
+      >
+        X
+      </button>
+      <div class="card-body">
+        <h1>HRS Control Panel</h1>
+        <p>Function : Control system for HRS Facility</p>
+      </div>
+    </div>
+    <!-- babyComp -->
+    <div
+      id="cardBabyComp"
+      class="card"
+      style="position: absolute; top: 50%; left: 50%; right: 5px"
+    >
+      <button
+        id="btn-close-babyComp"
+        class="btn btn-sm btn-danger"
+        style="position: absolute; top: -5px; right: -5px"
+      >
+        X
+      </button>
+      <div class="card-body">
+        <h1>Baby Compressor</h1>
+        <p>
+          Function : Supply air for pneumatic valve system. Supply pressure is 8
+          Bar
+        </p>
+      </div>
+    </div>
+    <button
+      class="btn btn-outline-success position-absolute btn-fs"
+      onclick="openFullscreen()"
+    >
+      <i class="fa-solid fa-expand"></i>
+    </button>
+    <button
+      class="btn btn-outline-danger position-absolute btn-cfs"
+      onclick="closeFullscreen()"
+    >
+      Close
+    </button>
+
+    <!-- <canvas id="renderCanvas" style="width: 100%; height: 100%"></canvas> -->
+
+    <script>
+      let showMenu = true;
+      function toggleSideMenu() {
+        var sideMenu = document.getElementById("side-menu");
+        if (showMenu) {
+          sideMenu.classList.remove("hidden");
+          sideMenu.classList.add("visible");
+        } else {
+          sideMenu.classList.remove("visible");
+          sideMenu.classList.add("hidden");
+        }
+        showMenu = !showMenu;
+      }
+
+      var elem = document.documentElement;
+      function openFullscreen() {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+          /* Safari */
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+          /* IE11 */
+          elem.msRequestFullscreen();
+        }
+      }
+
+      function closeFullscreen() {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          /* Safari */
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          /* IE11 */
+          document.msExitFullscreen();
+        }
+      }
+    </script>
+    <script type="module" src="./trial5.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
